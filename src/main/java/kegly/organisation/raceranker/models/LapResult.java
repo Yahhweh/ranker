@@ -1,14 +1,15 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.models;
 
 import lombok.Data;
 
 import java.time.Duration;
 
+
 @Data
 public class LapResult {
 
-    Duration time;
-    Driver driver;
+    private Duration time;
+    private Driver driver;
 
     public LapResult(Duration time, Driver driver) {
         this.time = time;

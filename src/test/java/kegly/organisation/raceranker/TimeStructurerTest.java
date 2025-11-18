@@ -1,26 +1,30 @@
 package kegly.organisation.raceranker;
 
+import kegly.organisation.raceranker.parsers.TimeParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class TimeStructurerTest {
 
-    TimeStructurer timeStructurer;
+    TimeParser timeStructurer;
+
     @BeforeEach
     void setUp() {
-        timeStructurer = new TimeStructurer();
+        timeStructurer = new TimeParser();
     }
 
     @Test
-    void parse_returnError_whenIncorrectTime() {
+    void parse_throwError_whenIncorrectTime() {
         String invalidLine = "SVF2018-055-24_12:02:58.917";
-        List<String> invalidInput = List.of(invalidLine);
+        Stream<String> invalidInput = Stream.of(invalidLine);
 
         assertThrows(
                 DateTimeParseException.class, () -> {
@@ -30,7 +34,7 @@ class TimeStructurerTest {
 
     @Test
     void parse_returnMap_whenCorrectTime() {
-        List<String> validInput = List.of(
+        Stream<String> validInput = Stream.of(
                 "SVF2018-05-24_12:02:58.917",
                 "DRR2018-05-24_12:03:01.002"
         );

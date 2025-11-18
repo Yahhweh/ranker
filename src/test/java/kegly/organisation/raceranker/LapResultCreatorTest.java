@@ -1,5 +1,8 @@
 package kegly.organisation.raceranker;
 
+import kegly.organisation.raceranker.services.LapResultCreator;
+import kegly.organisation.raceranker.models.Driver;
+import kegly.organisation.raceranker.models.LapResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +12,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LapResultCreaterTest {
 
-    private LapResultCreater lapResultCreater;
+class LapResultCreatorTest {
+
+    private LapResultCreator lapResultCreater;
     private Driver driver1;
     private Driver driver2;
     private Duration time1;
@@ -19,7 +23,7 @@ class LapResultCreaterTest {
 
     @BeforeEach
     void setUp() {
-        lapResultCreater = new LapResultCreater();
+        lapResultCreater = new LapResultCreator();
         driver1 = new Driver("DRR", "Daniel Ricciardo", "RED BULL");
         driver2 = new Driver("SVF", "Sebastian Vettel", "FERRARI");
         time1 = Duration.ofSeconds(72, 13000000);
@@ -27,7 +31,7 @@ class LapResultCreaterTest {
     }
 
     @Test
-    void createLapResult_returnFullList_whenAllKeysMatch() {
+    void createLapResult_returnsCompleteList_whenAllKeysMatch() {
         Map<String, Driver> drivers = Map.of("DRR", driver1, "SVF", driver2);
         Map<String, Duration> times = Map.of("DRR", time1, "SVF", time2);
 
@@ -43,7 +47,7 @@ class LapResultCreaterTest {
     }
 
     @Test
-    void createLapResult_returnPartialList_whenSomeKeysMissingInDriverMap() {
+    void createLapResult_filtersOutLaps_whenDriverDataIsMissing() {
         Map<String, Driver> drivers = Map.of("DRR", driver1);
         Map<String, Duration> times = Map.of("DRR", time1, "SVF", time2);
 
@@ -57,7 +61,7 @@ class LapResultCreaterTest {
     }
 
     @Test
-    void createLapResult_throwNullPointerException_whenTimeMapIsNull() {
+    void createLapResult_throwsException_whenTimesAreNull() {
         Map<String, Driver> drivers = Map.of("DRR", driver1);
 
         assertThrows(

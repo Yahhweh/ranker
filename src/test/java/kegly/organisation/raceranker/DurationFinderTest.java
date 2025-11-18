@@ -1,5 +1,6 @@
 package kegly.organisation.raceranker;
 
+import kegly.organisation.raceranker.services.DurationFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,13 +11,14 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CalculatingTimeTest {
 
-    private CalculatingTime calculator;
+class DurationFinderTest {
+
+    private DurationFinder durationFinder;
 
     @BeforeEach
     void setUp() {
-        calculator = new CalculatingTime();
+        durationFinder = new DurationFinder();
     }
 
     @Test
@@ -38,7 +40,7 @@ class CalculatingTimeTest {
                 "DRR", Duration.ofSeconds(72, 13000000)
         );
 
-        Map<String, Duration> result = calculator.calculateDifference(start, end);
+        Map<String, Duration> result = durationFinder.calculateDifference(start, end);
 
         assertEquals(expected, result);
     }
@@ -60,7 +62,7 @@ class CalculatingTimeTest {
                 "SVF", Duration.ofSeconds(30)
         );
 
-        Map<String, Duration> result = calculator.calculateDifference(start, end);
+        Map<String, Duration> result = durationFinder.calculateDifference(start, end);
 
         assertEquals(expected, result);
         assertEquals(1, result.size());
@@ -77,7 +79,7 @@ class CalculatingTimeTest {
                 "SVF", Duration.ofSeconds(-30)
         );
 
-        Map<String, Duration> result = calculator.calculateDifference(start, end);
+        Map<String, Duration> result = durationFinder.calculateDifference(start, end);
 
         assertEquals(expected, result);
     }
@@ -87,7 +89,7 @@ class CalculatingTimeTest {
         Map<String, LocalDateTime> start = Collections.emptyMap();
         Map<String, LocalDateTime> end = Map.of("SVF", LocalDateTime.now());
 
-        Map<String, Duration> result = calculator.calculateDifference(start, end);
+        Map<String, Duration> result = durationFinder.calculateDifference(start, end);
 
         assertTrue(result.isEmpty());
     }
@@ -98,7 +100,7 @@ class CalculatingTimeTest {
 
         assertThrows(
                 NullPointerException.class,
-                () -> calculator.calculateDifference(null, end)
+                () -> durationFinder.calculateDifference(null, end)
         );
     }
 
@@ -108,7 +110,7 @@ class CalculatingTimeTest {
 
         assertThrows(
                 NullPointerException.class,
-                () -> calculator.calculateDifference(start, null)
+                () -> durationFinder.calculateDifference(start, null)
         );
     }
 }

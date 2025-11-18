@@ -1,12 +1,14 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.models;
 
 import lombok.Data;
 
+
 @Data
 public class Driver {
-    String abbreviation;
-    String name;
-    String car;
+
+    private String abbreviation;
+    private String name;
+    private String car;
 
     public Driver(String abbreviation, String name, String car) {
         this.abbreviation = abbreviation;
