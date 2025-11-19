@@ -23,6 +23,11 @@ import java.util.stream.Stream;
 
 public class Main {
 
+    private static final String ABBREVIATIONS_FILE = "abbreviation.log";
+    private static final String START_LOG_FILE = "start.log";
+    private static final String END_LOG_FILE = "end.log";
+    private static final int LIMIT = 15;
+
     public static void main(String[] args) {
         DriverParser driverParser = new DriverParser();
         DataParser<Driver> abbreviationParser = new AbbreviationParser(driverParser);
@@ -32,8 +37,8 @@ public class Main {
         Ranking ranker = new Ranking();
         ReportPrinter printer = new ReportPrinter();
 
-        RaceController starter = new RaceController();
+        RaceController starter = new RaceController(abbreviationParser, timeParser, durationFinder, lapResultCreator, ranker, printer);
 
-        starter.makeReport(abbreviationParser, timeParser, durationFinder, lapResultCreator, ranker, printer);
+        starter.makeReport(ABBREVIATIONS_FILE, START_LOG_FILE,END_LOG_FILE, LIMIT);
     }
 }

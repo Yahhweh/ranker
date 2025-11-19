@@ -21,19 +21,28 @@ import java.util.stream.Stream;
 
 public class RaceController {
 
-    private static final String ABBREVIATIONS_FILE = "abbreviation.log";
-    private static final String START_LOG_FILE = "start.log";
-    private static final String END_LOG_FILE = "end.log";
+    private final DataParser<Driver> abbreviationParser;
+    private final DataParser<LocalDateTime> timeParser;
+    private final DurationFinder durationFinder;
+    private final LapResultCreator lapResultCreator;
+    private final Ranking ranker;
+    private final ReportPrinter printer;
 
-    public void makeReport(DataParser<Driver> abbreviationParser, DataParser<LocalDateTime> timeParser,
-                    DurationFinder durationFinder, LapResultCreator lapResultCreator,
-                    Ranking ranker, ReportPrinter printer){
+    public RaceController(DataParser<Driver> abbreviationParser, DataParser<LocalDateTime> timeParser, DurationFinder durationFinder, LapResultCreator lapResultCreator, Ranking ranker, ReportPrinter printer) {
+        this.abbreviationParser = abbreviationParser;
+        this.timeParser = timeParser;
+        this.durationFinder = durationFinder;
+        this.lapResultCreator = lapResultCreator;
+        this.ranker = ranker;
+        this.printer = printer;
+    }
+
+    public void makeReport(String abbreviationsFile, String startFile, String endFile, int limit) {
         try {
-            final int QUALIFICATION_LIMIT = 15;
 
-            Map<String, Driver> drivers = processFile(ABBREVIATIONS_FILE, abbreviationParser);
-            Map<String, LocalDateTime> startTimes = processFile(START_LOG_FILE, timeParser);
-            Map<String, LocalDateTime> endTimes = processFile(END_LOG_FILE, timeParser);
+            Map<String, Driver> drivers = processFile(abbreviationsFile, abbreviationParser);
+            Map<String, LocalDateTime> startTimes = processFile(startFile, timeParser);
+            Map<String, LocalDateTime> endTimes = processFile(endFile, timeParser);
 
             Map<String, Duration> durations = durationFinder.calculateDifference(startTimes, endTimes);
             List<LapResult> unsortedResults = lapResultCreator.createLapResult(drivers, durations);
@@ -41,11 +50,11 @@ public class RaceController {
 
             List<LapResult> sortedResults = ranker.sortResults(unsortedResults);
 
-            printer.print(sortedResults, QUALIFICATION_LIMIT);
+            printer.print(sortedResults, limit);
 
         } catch (IOException e) {
             System.err.println("Error while reading a file"
-                    + ABBREVIATIONS_FILE + ", " + START_LOG_FILE + ", " + END_LOG_FILE
+                    + abbreviationsFile + ", " + startFile + ", " + endFile
                     + " is located on wrong file");
             e.printStackTrace();
         } catch (Exception e) {
