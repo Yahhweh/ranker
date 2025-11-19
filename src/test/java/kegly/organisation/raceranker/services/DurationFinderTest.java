@@ -1,6 +1,5 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.services;
 
-import kegly.organisation.raceranker.services.DurationFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

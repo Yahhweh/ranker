@@ -1,6 +1,5 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.services;
 
-import kegly.organisation.raceranker.services.LapResultCreator;
 import kegly.organisation.raceranker.models.Driver;
 import kegly.organisation.raceranker.models.LapResult;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class LapResultCreatorTest {
 
@@ -32,7 +30,7 @@ class LapResultCreatorTest {
 
     @Test
     void createLapResult_returnsCompleteList_whenAllKeysMatch() {
-        Map<String, Driver> drivers = Map.of("DRR", driver1, "SVF", driver2);
+        List<Driver> drivers = List.of(driver1,driver2);
         Map<String, Duration> times = Map.of("DRR", time1, "SVF", time2);
 
         List<LapResult> expected = List.of(
@@ -48,7 +46,7 @@ class LapResultCreatorTest {
 
     @Test
     void createLapResult_filtersOutLaps_whenDriverDataIsMissing() {
-        Map<String, Driver> drivers = Map.of("DRR", driver1);
+        List<Driver> drivers = List.of(driver1);
         Map<String, Duration> times = Map.of("DRR", time1, "SVF", time2);
 
         List<LapResult> expected = List.of(
@@ -62,7 +60,7 @@ class LapResultCreatorTest {
 
     @Test
     void createLapResult_throwsException_whenTimesAreNull() {
-        Map<String, Driver> drivers = Map.of("DRR", driver1);
+        List<Driver> drivers = List.of(driver1);
 
         assertThrows(
                 NullPointerException.class,

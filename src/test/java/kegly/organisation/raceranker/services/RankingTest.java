@@ -1,8 +1,7 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.services;
 
 import kegly.organisation.raceranker.models.Driver;
 import kegly.organisation.raceranker.models.LapResult;
-import kegly.organisation.raceranker.services.Ranking;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

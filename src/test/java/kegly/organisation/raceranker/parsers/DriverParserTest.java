@@ -1,26 +1,24 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.parsers;
 
 import kegly.organisation.raceranker.models.Driver;
-import kegly.organisation.raceranker.parsers.AbbreviationParser;
-import kegly.organisation.raceranker.parsers.DriverParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class AbbreviationParserTest {
+class DriverParserTest {
 
-    AbbreviationParser abbreviationParser;
     DriverParser driverParser;
 
     @BeforeEach
     void setUp() {
-        abbreviationParser = new AbbreviationParser(driverParser);
+        driverParser = new DriverParser();
     }
 
     @Test
@@ -30,7 +28,7 @@ class AbbreviationParserTest {
 
         assertThrows(
                 IllegalArgumentException.class, () -> {
-                    abbreviationParser.parse(invalidInput);
+                    driverParser.parse(invalidInput);
                 });
     }
 
@@ -41,7 +39,7 @@ class AbbreviationParserTest {
 
         assertThrows(
                 IllegalArgumentException.class, () -> {
-                    abbreviationParser.parse(invalidInput);
+                    driverParser.parse(invalidInput);
                 });
     }
 
@@ -53,7 +51,7 @@ class AbbreviationParserTest {
 
         assertThrows(
                 IllegalArgumentException.class, () -> {
-                    abbreviationParser.parse(invalidInput);
+                    driverParser.parse(invalidInput);
                 });
     }
 
@@ -68,7 +66,7 @@ class AbbreviationParserTest {
         expected.put("DRR", new Driver("DRR", "Daniel Ricciardo", "RED BULL RACING TAG HEUER"));
         expected.put("SVF", new Driver("SVF", "Sebastian Vettel", "FERRARI"));
 
-        Map<String, Driver> result = abbreviationParser.parse(validInput);
+        List<Driver> result = driverParser.parse(validInput);
 
         assertEquals(expected, result);
     }

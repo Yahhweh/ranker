@@ -1,6 +1,5 @@
-package kegly.organisation.raceranker;
+package kegly.organisation.raceranker.parsers;
 
-import kegly.organisation.raceranker.parsers.TimeParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,13 +11,13 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class TimeStructurerTest {
+class TimeParserTest {
 
-    TimeParser timeStructurer;
+    TimeParser timeParser;
 
     @BeforeEach
     void setUp() {
-        timeStructurer = new TimeParser();
+        timeParser = new TimeParser();
     }
 
     @Test
@@ -28,7 +27,7 @@ class TimeStructurerTest {
 
         assertThrows(
                 DateTimeParseException.class, () -> {
-                    timeStructurer.parse(invalidInput);
+                    timeParser.parse(invalidInput);
                 });
     }
 
@@ -43,7 +42,7 @@ class TimeStructurerTest {
         expectedMap.put("SVF", LocalDateTime.of(2018, 5, 24, 12, 2, 58, 917000000));
         expectedMap.put("DRR", LocalDateTime.of(2018, 5, 24, 12, 3, 1, 2000000));
 
-        Map<String, LocalDateTime> actualMap = timeStructurer.parse(validInput);
+        Map<String, LocalDateTime> actualMap = timeParser.parse(validInput);
 
         assertEquals(expectedMap, actualMap);
     }

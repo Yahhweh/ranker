@@ -1,10 +1,8 @@
 package kegly.organisation.raceranker.controller;
 
-import kegly.organisation.raceranker.interfaces.DataParser;
+import kegly.organisation.raceranker.parsers.DataParser;
 import kegly.organisation.raceranker.models.Driver;
 import kegly.organisation.raceranker.models.LapResult;
-import kegly.organisation.raceranker.parsers.AbbreviationParser;
-import kegly.organisation.raceranker.parsers.TimeParser;
 import kegly.organisation.raceranker.printers.ReportPrinter;
 import kegly.organisation.raceranker.services.DurationFinder;
 import kegly.organisation.raceranker.services.LapResultCreator;
@@ -21,14 +19,14 @@ import java.util.stream.Stream;
 
 public class RaceController {
 
-    private final DataParser<Driver> abbreviationParser;
-    private final DataParser<LocalDateTime> timeParser;
+    private final DataParser<List<Driver>> abbreviationParser;
+    private final DataParser<Map<String, LocalDateTime>> timeParser;
     private final DurationFinder durationFinder;
     private final LapResultCreator lapResultCreator;
     private final Ranking ranker;
     private final ReportPrinter printer;
 
-    public RaceController(DataParser<Driver> abbreviationParser, DataParser<LocalDateTime> timeParser, DurationFinder durationFinder, LapResultCreator lapResultCreator, Ranking ranker, ReportPrinter printer) {
+    public RaceController(DataParser<List<Driver>> abbreviationParser, DataParser<Map<String, LocalDateTime>> timeParser, DurationFinder durationFinder, LapResultCreator lapResultCreator, Ranking ranker, ReportPrinter printer) {
         this.abbreviationParser = abbreviationParser;
         this.timeParser = timeParser;
         this.durationFinder = durationFinder;
@@ -40,14 +38,12 @@ public class RaceController {
     public void makeReport(String abbreviationsFile, String startFile, String endFile, int limit) {
         try {
 
-            Map<String, Driver> drivers = processFile(abbreviationsFile, abbreviationParser);
+            List<Driver> drivers = processFile(abbreviationsFile, abbreviationParser);
             Map<String, LocalDateTime> startTimes = processFile(startFile, timeParser);
             Map<String, LocalDateTime> endTimes = processFile(endFile, timeParser);
 
             Map<String, Duration> durations = durationFinder.calculateDifference(startTimes, endTimes);
             List<LapResult> unsortedResults = lapResultCreator.createLapResult(drivers, durations);
-
-
             List<LapResult> sortedResults = ranker.sortResults(unsortedResults);
 
             printer.print(sortedResults, limit);
@@ -63,7 +59,7 @@ public class RaceController {
         }
     }
 
-    private static <T> Map<String, T> processFile(String filename, DataParser<T> parser) throws IOException {
+    private <T> T processFile(String filename, DataParser<T> parser) throws IOException {
         try (Stream<String> lines = Files.lines(Paths.get(filename))) {
             return parser.parse(lines);
         }

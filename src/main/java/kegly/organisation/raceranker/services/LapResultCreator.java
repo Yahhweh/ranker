@@ -4,27 +4,24 @@ import kegly.organisation.raceranker.models.Driver;
 import kegly.organisation.raceranker.models.LapResult;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class LapResultCreator {
 
-    public List<LapResult> createLapResult(Map<String, Driver> driversByAbbreviation,
-                                           Map<String, Duration> lapTimesByAbbreviation) {
-        List<LapResult> result = new ArrayList<>();
+    public List<LapResult> createLapResult(List<Driver> drivers, Map<String, Duration> durations) {
+        return drivers.stream()
+                .map(driver -> {
+                    Duration duration = durations.get(driver.getAbbreviation());
+                    if (duration == null) {
+                        return null;
+                    }
 
-        for (Map.Entry<String, Duration> timeEntry : lapTimesByAbbreviation.entrySet()) {
-
-            String abbreviation = timeEntry.getKey();
-            Duration duration = timeEntry.getValue();
-
-            Driver driverData = driversByAbbreviation.get(abbreviation);
-
-            if (driverData != null) {
-                LapResult lap = new LapResult(duration, driverData);
-                result.add(lap);
-            }
-        }
-
-        return result;
+                    return new LapResult(duration, driver);
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }
