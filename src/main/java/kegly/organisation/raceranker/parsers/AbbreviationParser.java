@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 public class AbbreviationParser implements DataParser<Driver> {
 
     private final DriverParser parser = new DriverParser();

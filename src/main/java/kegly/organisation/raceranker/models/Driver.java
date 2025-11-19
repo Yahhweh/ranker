@@ -2,7 +2,6 @@ package kegly.organisation.raceranker.models;
 
 import lombok.Data;
 
-
 @Data
 public class Driver {
 

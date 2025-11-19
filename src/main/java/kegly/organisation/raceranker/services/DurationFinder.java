@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
 public class DurationFinder {
 
     public Map<String, Duration> calculateDifference(

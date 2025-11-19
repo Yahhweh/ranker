@@ -2,7 +2,6 @@ package kegly.organisation.raceranker.parsers;
 
 import kegly.organisation.raceranker.models.Driver;
 
-
 public class DriverParser {
 
     public Driver parse(String line) {

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-
 public class Main {
     private static final String ABBREVIATIONS_FILE = "abbreviation.log";
     private static final String START_LOG_FILE = "start.log";

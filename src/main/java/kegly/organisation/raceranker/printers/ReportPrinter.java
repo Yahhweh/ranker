@@ -6,7 +6,6 @@ import kegly.organisation.raceranker.formatter.ReportFormatter;
 
 import java.util.List;
 
-
 public class ReportPrinter {
 
     private static final String SEPARATOR = "------------------------------------------------------------------------";

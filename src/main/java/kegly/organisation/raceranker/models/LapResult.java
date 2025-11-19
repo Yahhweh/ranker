@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.time.Duration;
 
-
 @Data
 public class LapResult {
 

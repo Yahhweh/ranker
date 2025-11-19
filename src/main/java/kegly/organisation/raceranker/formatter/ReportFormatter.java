@@ -5,7 +5,6 @@ import kegly.organisation.raceranker.models.LapResult;
 
 import java.time.Duration;
 
-
 public class ReportFormatter {
 
     public String formatLine(int rank, LapResult lapResult) {

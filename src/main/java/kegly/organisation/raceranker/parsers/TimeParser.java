@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 public class TimeParser implements DataParser<LocalDateTime> {
 
     private static final DateTimeFormatter FORMATTER =

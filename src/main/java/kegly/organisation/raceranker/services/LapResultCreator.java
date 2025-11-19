@@ -6,7 +6,6 @@ import kegly.organisation.raceranker.models.LapResult;
 import java.time.Duration;
 import java.util.*;
 
-
 public class LapResultCreator {
 
     public List<LapResult> createLapResult(Map<String, Driver> driversByAbbreviation,
