@@ -9,7 +9,11 @@ import java.util.stream.Stream;
 
 public class AbbreviationParser implements DataParser<Driver> {
 
-    private final DriverParser parser = new DriverParser();
+    private final DriverParser parser;
+
+    public AbbreviationParser(DriverParser parser) {
+        this.parser = parser;
+    }
 
     @Override
     public Map<String, Driver> parse(Stream<String> lines) {

@@ -2,6 +2,7 @@ package kegly.organisation.raceranker;
 
 import kegly.organisation.raceranker.models.Driver;
 import kegly.organisation.raceranker.parsers.AbbreviationParser;
+import kegly.organisation.raceranker.parsers.DriverParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,10 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AbbreviationParserTest {
 
     AbbreviationParser abbreviationParser;
+    DriverParser driverParser;
 
     @BeforeEach
     void setUp() {
-        abbreviationParser = new AbbreviationParser();
+        abbreviationParser = new AbbreviationParser(driverParser);
     }
 
     @Test

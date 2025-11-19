@@ -7,10 +7,10 @@ import java.util.*;
 public class DurationFinder {
 
     public Map<String, Duration> calculateDifference(
-            Map<String, LocalDateTime> StartByAbbreviation, Map<String, LocalDateTime> EndByAbbreviation) {
+            Map<String, LocalDateTime> startByAbbreviation, Map<String, LocalDateTime> EndByAbbreviation) {
         Map<String, Duration> result = new HashMap<>();
 
-        for (Map.Entry<String, LocalDateTime> startEntry : StartByAbbreviation.entrySet()) {
+        for (Map.Entry<String, LocalDateTime> startEntry : startByAbbreviation.entrySet()) {
             String key = startEntry.getKey();
 
             LocalDateTime endTime = EndByAbbreviation.get(key);

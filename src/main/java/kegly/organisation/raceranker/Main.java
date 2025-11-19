@@ -2,6 +2,7 @@ package kegly.organisation.raceranker;
 
 import kegly.organisation.raceranker.interfaces.DataParser;
 import kegly.organisation.raceranker.parsers.AbbreviationParser;
+import kegly.organisation.raceranker.parsers.DriverParser;
 import kegly.organisation.raceranker.printers.ReportPrinter;
 import kegly.organisation.raceranker.services.LapResultCreator;
 import kegly.organisation.raceranker.models.Driver;
@@ -25,7 +26,8 @@ public class Main {
     private static final String END_LOG_FILE = "end.log";
 
     public static void main(String[] args) {
-        DataParser<Driver> abbreviationParser = new AbbreviationParser();
+        DriverParser driverParser = new DriverParser();
+        DataParser<Driver> abbreviationParser = new AbbreviationParser(driverParser);
         DataParser<LocalDateTime> timeParser = new TimeParser();
         DurationFinder calculator = new DurationFinder();
         LapResultCreator assembler = new LapResultCreator();

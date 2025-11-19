@@ -15,10 +15,11 @@ public class TimeParser implements DataParser<LocalDateTime> {
 
     @Override
     public Map<String, LocalDateTime> parse(Stream<String> lines) {
+        int ABBREVIATION_LENGTH = 3;
         return lines
                 .collect(Collectors.toMap(
-                        line -> line.substring(0, 3),
-                        line -> LocalDateTime.parse(line.substring(3).trim(), FORMATTER)));
+                        line -> line.substring(0, ABBREVIATION_LENGTH),
+                        line -> LocalDateTime.parse(line.substring(ABBREVIATION_LENGTH).trim(), FORMATTER)));
 
     }
 }
