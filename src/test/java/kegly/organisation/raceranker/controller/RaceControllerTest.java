@@ -88,6 +88,32 @@ class RaceControllerTest {
         verify(printer, times(1)).print(mockResults, 15);
     }
 
+    @Test
+    void makeReport_throwIOException_whenFilesAreNotExist() throws  IOException{
+        Path abbrFile = createDummyFile("aabbreviations.txt");
+        Path startFile = createDummyFile("sstart.log");
+        Path endFile = createDummyFile("eend.log");
+
+        List<Driver> mockDrivers = List.of(new Driver("DR1", "Name", "Team"));
+        Map<String, LocalDateTime> mockStartTimes = Map.of("DR1", LocalDateTime.now());
+        Map<String, LocalDateTime> mockEndTimes = Map.of("DR1", LocalDateTime.now());
+        Map<String, Duration> mockDurations = Map.of("DR1", Duration.ZERO);
+        List<LapResult> mockResults = Collections.singletonList(mock(LapResult.class));
+
+        when(abbreviationParser.parse(any(Stream.class))).thenReturn(mockDrivers);
+        when(timeParser.parse(any(Stream.class))).thenReturn(mockStartTimes).thenReturn(mockEndTimes);
+        when(durationFinder.calculateDifference(mockStartTimes, mockEndTimes)).thenReturn(mockDurations);
+        when(lapResultCreator.createLapResult(mockDrivers, mockDurations)).thenReturn(mockResults);
+        when(ranker.sortResults(mockResults)).thenReturn(mockResults);
+
+        raceController.makeReport(
+                abbrFile.toString(),
+                startFile.toString(),
+                endFile.toString(),
+                15
+        );
+    }
+
     private Path createDummyFile(String name) throws IOException {
         Path file = tempDir.resolve(name);
         Files.write(file, List.of("DUMMY_CONTENT"));
