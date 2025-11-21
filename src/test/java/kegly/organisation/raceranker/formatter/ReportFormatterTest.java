@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportFormatterTest {
 
@@ -29,17 +29,21 @@ class ReportFormatterTest {
     void format_shouldReturnFullReportWithSeparator_whenLimitIsReached() {
         Duration time1 = Duration.ofMinutes(1).plusSeconds(12).plusMillis(913);
         Duration time2 = Duration.ofMinutes(1).plusSeconds(13).plusMillis(0);
-
         List<LapResult> results = Arrays.asList(
                 new LapResult(time1, driver1),
                 new LapResult(time2, driver2)
         );
-
         int qualificationLimit = 1;
 
-        String expected = "1.  Daniel Ricciardo     | RED BULL RACING TAG HEUER | 1:12.913" + System.lineSeparator() +
-                "------------------------------------------------------------------------" + System.lineSeparator() +
-                "2.  Sebastian Vettel     | FERRARI                   | 1:13.000" + System.lineSeparator();
+        String row1 = "1.  Daniel Ricciardo     | RED BULL RACING TAG HEUER | 1:12.913";
+        String row2 = "2.  Sebastian Vettel     | FERRARI                   | 1:13.000";
+        String separator = "-".repeat(row1.length());
+
+        String expected = String.join(System.lineSeparator(),
+                row1,
+                separator,
+                row2
+        ) + System.lineSeparator();
 
         String result = formatter.format(results, qualificationLimit);
 
@@ -51,9 +55,12 @@ class ReportFormatterTest {
         Duration zeroSecondsTime = Duration.ofMinutes(1).plusSeconds(9).plusMillis(5);
         List<LapResult> results = Collections.singletonList(new LapResult(zeroSecondsTime, driver1));
 
+        String expected = "1.  Daniel Ricciardo     | RED BULL RACING TAG HEUER | 1:09.005" +
+                System.lineSeparator();
+
         String result = formatter.format(results, 10);
 
-        assertTrue(result.contains("1:09.005"));
+        assertEquals(expected, result);
     }
 
     @Test
@@ -61,18 +68,49 @@ class ReportFormatterTest {
         Duration shortTime = Duration.ofSeconds(45).plusMillis(100);
         List<LapResult> results = Collections.singletonList(new LapResult(shortTime, driver1));
 
+        String expected = "1.  Daniel Ricciardo     | RED BULL RACING TAG HEUER | 0:45.100" +
+                System.lineSeparator();
+
         String result = formatter.format(results, 10);
 
-        assertTrue(result.contains("0:45.100"));
+        assertEquals(expected, result);
     }
 
     @Test
-    void format_shouldThrowException_whenDurationIsNegative() {
-        Duration negativeTime = Duration.ofMillis(-100);
-        List<LapResult> results = Collections.singletonList(new LapResult(negativeTime, driver1));
+    void format_shouldReturnReportWithoutSeparator_whenQualificationLimitIsZero() {
+        Duration time1 = Duration.ofMinutes(1).plusSeconds(12);
+        Duration time2 = Duration.ofMinutes(1).plusSeconds(13);
+        List<LapResult> results = Arrays.asList(
+                new LapResult(time1, driver1),
+                new LapResult(time2, driver2)
+        );
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            formatter.format(results, 10);
-        });
+        String expected = String.join(System.lineSeparator(),
+                "1.  Daniel Ricciardo     | RED BULL RACING TAG HEUER | 1:12.000",
+                "2.  Sebastian Vettel     | FERRARI                   | 1:13.000"
+        ) + System.lineSeparator();
+
+        String result = formatter.format(results, 0);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void format_shouldReturnReportWithoutSeparator_whenQualificationLimitCoversAllDrivers() {
+        Duration time1 = Duration.ofMinutes(1).plusSeconds(12);
+        Duration time2 = Duration.ofMinutes(1).plusSeconds(13);
+        List<LapResult> results = Arrays.asList(
+                new LapResult(time1, driver1),
+                new LapResult(time2, driver2)
+        );
+
+        String expected = String.join(System.lineSeparator(),
+                "1.  Daniel Ricciardo     | RED BULL RACING TAG HEUER | 1:12.000",
+                "2.  Sebastian Vettel     | FERRARI                   | 1:13.000"
+        ) + System.lineSeparator();
+
+        assertEquals(expected, formatter.format(results, 2));
+
+        assertEquals(expected, formatter.format(results, 5));
     }
 }

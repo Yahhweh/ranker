@@ -14,10 +14,8 @@ public class ReportPrinter {
         this.formatter = formatter;
     }
 
-    private static final String SEPARATOR = "------------------------------------------------------------------------";
-
     public void print(List<LapResult> sortedResult, int qualificationLimit) {
         String report = formatter.format(sortedResult, qualificationLimit);
         System.out.print(report);
-            }
-        }
+    }
+}

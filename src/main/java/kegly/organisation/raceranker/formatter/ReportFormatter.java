@@ -8,8 +8,6 @@ import java.util.List;
 
 public class ReportFormatter {
 
-    private static final String SEPARATOR = "------------------------------------------------------------------------";
-
     public String format(List<LapResult> sortedResult, int qualificationLimit) {
         StringBuilder report = new StringBuilder();
 
@@ -17,11 +15,12 @@ public class ReportFormatter {
             int rank = i + 1;
             LapResult lap = sortedResult.get(i);
 
-            report.append(formatLine(rank, lap))
+            String line = formatLine(rank, lap);
+            report.append(line)
                     .append(System.lineSeparator());
 
-            if (rank == qualificationLimit) {
-                report.append(SEPARATOR)
+            if (rank == qualificationLimit && i < sortedResult.size() - 1) {
+                report.append("-".repeat(line.length()))
                         .append(System.lineSeparator());
             }
         }
@@ -43,11 +42,7 @@ public class ReportFormatter {
     private String formatDuration(Duration duration) {
         long totalMillis = duration.toMillis();
 
-        if (totalMillis < 0) {
-            throw new IllegalArgumentException("Duration cannot be negative: " + totalMillis);
-        }
-
-        long minutes = totalMillis / 60000;
+        long minutes = duration.toMinutes();
         long remainingMillis = totalMillis % 60000;
 
         long seconds = remainingMillis / 1000;

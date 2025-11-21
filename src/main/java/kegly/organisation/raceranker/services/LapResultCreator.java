@@ -13,15 +13,11 @@ public class LapResultCreator {
 
     public List<LapResult> createLapResult(List<Driver> drivers, Map<String, Duration> durations) {
         return drivers.stream()
+                .filter(driver -> durations.containsKey(driver.getAbbreviation()))
                 .map(driver -> {
                     Duration duration = durations.get(driver.getAbbreviation());
-                    if (duration == null) {
-                        return null;
-                    }
-
                     return new LapResult(duration, driver);
                 })
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 }

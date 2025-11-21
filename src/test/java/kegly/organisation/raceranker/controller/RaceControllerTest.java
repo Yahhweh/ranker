@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -42,23 +43,11 @@ class RaceControllerTest {
     private Ranking ranker;
     @Mock
     private ReportPrinter printer;
-
+    @InjectMocks
     private RaceController raceController;
 
     @TempDir
     Path tempDir;
-
-    @BeforeEach
-    void setUp() {
-        raceController = new RaceController(
-                abbreviationParser,
-                timeParser,
-                durationFinder,
-                lapResultCreator,
-                ranker,
-                printer
-        );
-    }
 
     @Test
     void makeReport_printReport_whenFilesAreValid() throws IOException {

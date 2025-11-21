@@ -18,6 +18,7 @@ class LapResultCreatorTest {
     private Driver driver2;
     private Duration time1;
     private Duration time2;
+    private Duration time3;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +27,7 @@ class LapResultCreatorTest {
         driver2 = new Driver("SVF", "Sebastian Vettel", "FERRARI");
         time1 = Duration.ofSeconds(72, 13000000);
         time2 = Duration.ofSeconds(72, 415000000);
+        time3 = Duration.ofSeconds(-72, 415000000);
     }
 
     @Test
@@ -65,6 +67,18 @@ class LapResultCreatorTest {
         assertThrows(
                 NullPointerException.class,
                 () -> lapResultCreater.createLapResult(drivers, null)
+        );
+    }
+
+    @Test
+    void createLapResult_throwsException_whenTimesAreNegative(){
+        List<Driver> drivers = List.of(driver1);
+
+        Map<String, Duration> times = Map.of("DRR", time3);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> lapResultCreater.createLapResult(drivers, times)
         );
     }
 }

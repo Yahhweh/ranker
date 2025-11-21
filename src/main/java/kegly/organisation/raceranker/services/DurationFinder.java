@@ -3,25 +3,21 @@ package kegly.organisation.raceranker.services;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class DurationFinder {
 
     public Map<String, Duration> calculateDifference(
             Map<String, LocalDateTime> startByAbbreviation, Map<String, LocalDateTime> EndByAbbreviation) {
-        Map<String, Duration> result = new HashMap<>();
 
-        for (Map.Entry<String, LocalDateTime> startEntry : startByAbbreviation.entrySet()) {
-            String key = startEntry.getKey();
+        return startByAbbreviation.entrySet().stream()
+                .filter(startEntry -> EndByAbbreviation.get(startEntry.getKey())!= null)
+                .collect(Collectors.toMap(
+                        key -> key.getKey(),
+                        startEntry -> Duration.between(startEntry.getValue(), EndByAbbreviation.get(startEntry.getKey()))
+                )
+                );
 
-            LocalDateTime endTime = EndByAbbreviation.get(key);
-
-            if (endTime != null) {
-
-                LocalDateTime startTime = startEntry.getValue();
-
-                result.put(key, Duration.between(startTime, endTime));
-            }
-        }
-        return result;
     }
 }

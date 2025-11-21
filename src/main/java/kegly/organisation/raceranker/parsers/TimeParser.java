@@ -16,8 +16,8 @@ public class TimeParser implements DataParser<Map<String, LocalDateTime>> {
     @Override
     public Map<String, LocalDateTime> parse(Stream<String> lines) {
         return lines.collect(Collectors.toMap(
-                line -> line.substring(0, ABBREVIATION_LENGTH), // Ключ (SVF)
-                line -> LocalDateTime.parse(line.substring(ABBREVIATION_LENGTH).trim(), FORMATTER)                              // Значение (Время)
+                line -> line.substring(0, ABBREVIATION_LENGTH),
+                line -> LocalDateTime.parse(line.substring(ABBREVIATION_LENGTH).trim(), FORMATTER)
         ));
     }
 }
