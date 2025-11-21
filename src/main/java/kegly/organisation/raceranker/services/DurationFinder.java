@@ -2,8 +2,7 @@ package kegly.organisation.raceranker.services;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collector;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DurationFinder {

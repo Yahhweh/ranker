@@ -32,7 +32,7 @@ class LapResultCreatorTest {
 
     @Test
     void createLapResult_returnsCompleteList_whenAllKeysMatch() {
-        List<Driver> drivers = List.of(driver1,driver2);
+        List<Driver> drivers = List.of(driver1, driver2);
         Map<String, Duration> times = Map.of("DRR", time1, "SVF", time2);
 
         List<LapResult> expected = List.of(
@@ -71,7 +71,7 @@ class LapResultCreatorTest {
     }
 
     @Test
-    void createLapResult_throwsException_whenTimesContainNegativeValue(){
+    void createLapResult_throwsException_whenTimesContainNegativeValue() {
         List<Driver> drivers = List.of(driver1);
 
         Map<String, Duration> times = Map.of("DRR", time3);
