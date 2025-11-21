@@ -11,6 +11,7 @@ import kegly.organisation.raceranker.parsers.TimeParser;
 import kegly.organisation.raceranker.services.DurationFinder;
 import kegly.organisation.raceranker.services.Ranking;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class Main {
     private static final String END_LOG_FILE = "end.log";
     private static final int LIMIT = 15;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         DataParser<List<Driver>> driverParser = new DriverParser();
         DataParser<Map<String, LocalDateTime>> timeParser = new TimeParser();
         DurationFinder durationFinder = new DurationFinder();

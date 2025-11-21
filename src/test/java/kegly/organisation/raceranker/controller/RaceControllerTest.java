@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -43,11 +44,23 @@ class RaceControllerTest {
     private Ranking ranker;
     @Mock
     private ReportPrinter printer;
-    @InjectMocks
+
     private RaceController raceController;
 
     @TempDir
     Path tempDir;
+
+    @BeforeEach
+    void setUp() {
+        raceController = new RaceController(
+                abbreviationParser,
+                timeParser,
+                durationFinder,
+                lapResultCreator,
+                ranker,
+                printer
+        );
+    }
 
     @Test
     void makeReport_printReport_whenFilesAreValid() throws IOException {
@@ -78,29 +91,19 @@ class RaceControllerTest {
     }
 
     @Test
-    void makeReport_throwIOException_whenFilesAreNotExist() throws  IOException{
-        Path abbrFile = createDummyFile("aabbreviations.txt");
-        Path startFile = createDummyFile("sstart.log");
-        Path endFile = createDummyFile("eend.log");
+    void makeReport_throwIOException_whenFilesAreNotExist() {
+        String abbrFile = tempDir.resolve("missing_abbr.txt").toString();
+        String startFile = tempDir.resolve("missing_start.log").toString();
+        String endFile = tempDir.resolve("missing_end.log").toString();
 
-        List<Driver> mockDrivers = List.of(new Driver("DR1", "Name", "Team"));
-        Map<String, LocalDateTime> mockStartTimes = Map.of("DR1", LocalDateTime.now());
-        Map<String, LocalDateTime> mockEndTimes = Map.of("DR1", LocalDateTime.now());
-        Map<String, Duration> mockDurations = Map.of("DR1", Duration.ZERO);
-        List<LapResult> mockResults = Collections.singletonList(mock(LapResult.class));
-
-        when(abbreviationParser.parse(any(Stream.class))).thenReturn(mockDrivers);
-        when(timeParser.parse(any(Stream.class))).thenReturn(mockStartTimes).thenReturn(mockEndTimes);
-        when(durationFinder.calculateDifference(mockStartTimes, mockEndTimes)).thenReturn(mockDurations);
-        when(lapResultCreator.createLapResult(mockDrivers, mockDurations)).thenReturn(mockResults);
-        when(ranker.sortResults(mockResults)).thenReturn(mockResults);
-
-        raceController.makeReport(
-                abbrFile.toString(),
-                startFile.toString(),
-                endFile.toString(),
-                15
-        );
+        assertThrows(IOException.class, () -> {
+            raceController.makeReport(
+                    abbrFile.toString(),
+                    startFile.toString(),
+                    endFile.toString(),
+                    15
+            );
+        });
     }
 
     private Path createDummyFile(String name) throws IOException {

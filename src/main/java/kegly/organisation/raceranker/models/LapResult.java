@@ -11,7 +11,7 @@ public class LapResult {
     private Driver driver;
 
     public LapResult(Duration time, Driver driver) {
-        if(time.isNegative()){
+        if (time.isNegative()) {
             throw new IllegalArgumentException("Duration cannot be negative: ");
         }
         this.time = time;

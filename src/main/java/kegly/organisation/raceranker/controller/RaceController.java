@@ -35,28 +35,16 @@ public class RaceController {
         this.printer = printer;
     }
 
-    public void makeReport(String abbreviationsFile, String startFile, String endFile, int limit) {
-        try {
+    public void makeReport(String abbreviationsFile, String startFile, String endFile, int limit) throws IOException {
+        List<Driver> drivers = processFile(abbreviationsFile, abbreviationParser);
+        Map<String, LocalDateTime> startTimes = processFile(startFile, timeParser);
+        Map<String, LocalDateTime> endTimes = processFile(endFile, timeParser);
 
-            List<Driver> drivers = processFile(abbreviationsFile, abbreviationParser);
-            Map<String, LocalDateTime> startTimes = processFile(startFile, timeParser);
-            Map<String, LocalDateTime> endTimes = processFile(endFile, timeParser);
+        Map<String, Duration> durations = durationFinder.calculateDifference(startTimes, endTimes);
+        List<LapResult> unsortedResults = lapResultCreator.createLapResult(drivers, durations);
+        List<LapResult> sortedResults = ranker.sortResults(unsortedResults);
 
-            Map<String, Duration> durations = durationFinder.calculateDifference(startTimes, endTimes);
-            List<LapResult> unsortedResults = lapResultCreator.createLapResult(drivers, durations);
-            List<LapResult> sortedResults = ranker.sortResults(unsortedResults);
-
-            printer.print(sortedResults, limit);
-
-        } catch (IOException e) {
-            System.err.println("Error while reading a file"
-                    + abbreviationsFile + ", " + startFile + ", " + endFile
-                    + " is located on wrong file");
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("Some error appeared");
-            e.printStackTrace();
-        }
+        printer.print(sortedResults, limit);
     }
 
     private <T> T processFile(String filename, DataParser<T> parser) throws IOException {

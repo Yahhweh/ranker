@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 public class DurationFinder {
 
     public Map<String, Duration> calculateDifference(
-            Map<String, LocalDateTime> startByAbbreviation, Map<String, LocalDateTime> EndByAbbreviation) {
+            Map<String, LocalDateTime> startByAbbreviation, Map<String, LocalDateTime> endByAbbreviation) {
 
         return startByAbbreviation.entrySet().stream()
-                .filter(startEntry -> EndByAbbreviation.get(startEntry.getKey())!= null)
+                .filter(startEntry -> endByAbbreviation.get(startEntry.getKey())!= null)
                 .collect(Collectors.toMap(
                         key -> key.getKey(),
-                        startEntry -> Duration.between(startEntry.getValue(), EndByAbbreviation.get(startEntry.getKey()))
+                        startEntry -> Duration.between(startEntry.getValue(), endByAbbreviation.get(startEntry.getKey()))
                 )
                 );
 

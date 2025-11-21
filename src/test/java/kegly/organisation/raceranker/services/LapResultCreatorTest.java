@@ -71,7 +71,7 @@ class LapResultCreatorTest {
     }
 
     @Test
-    void createLapResult_throwsException_whenTimesAreNegative(){
+    void createLapResult_throwsException_whenTimesContainNegativeValue(){
         List<Driver> drivers = List.of(driver1);
 
         Map<String, Duration> times = Map.of("DRR", time3);
